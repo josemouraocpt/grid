@@ -1,5 +1,4 @@
 import pygame
-import cv2
 import time
 
 class Agente:
@@ -118,17 +117,56 @@ if __name__ == "__main__":
     black = (0, 0, 0)
     screen.fill(black)
 
-
     while not done:
-        drawGrid(screen, white)
-        time.sleep(1)
-        pygame.draw.rect(screen, color, pygame.Rect(agente.position[1], agente.position[0], 100, 100))
-        for i in range(0, len(grid)):
-            for event in pygame.event.get():
-                if event.type == "QUIT":
+      drawGrid(screen, white)
+      time.sleep(1)
+      pygame.draw.rect(screen, color, pygame.Rect(agente.position[1], agente.position[0], 100, 100))
+      for i in range(0, len(grid)):
+        for j in range(agente.position[1], len(grid[i])):
+          if j + 1 < len(grid[i]) and grid[i][j + 1] in [0, "G"]:
+            agente.move_right()
+            if grid[agente.position[0]][agente.position[1]] == "G":
+              time.sleep(2)
+              done = True
+              print("FIM")
+              break
+          else:
+            if i + 1 < len(grid) and grid[i + 1][agente.position[1]] in [0, "G"]:
+              agente.move_down()
+              if grid[agente.position[0]][agente.position[1]] == "G":
+                time.sleep(2)
+                done = True
+                print("FIM")
+                break
+              break
+            else:
+              agente.move_left()
+              if grid[agente.position[0]][agente.position[1]] == "G":
+                time.sleep(2)
+                done = True
+                print("FIM")
+                break
+              else:
+                if i < len(grid):
+                  agente.move_down()
+                  if grid[agente.position[0]][agente.position[1]] == "G":
+                    time.sleep(2)
                     done = True
-            fim = move_agente(i, grid[i], agente)
-            pygame.display.update()
-            if fim == True:
-               time.sleep(2)
-               done = True
+                    print("FIM")
+                    break
+                  break
+                else:
+                  agente.move_up()
+                  if grid[agente.position[0]][agente.position[1]] == "G":
+                    time.sleep(2)
+                    done = True
+                    print("FIM")
+                    break
+                  break
+          if agente.position[1] - 1 >= 0 and grid[i][agente.position[1] - 1] in [0, "G"] and (j + 1 < len(grid[i]) and grid[i][j + 1] != 0):
+            agente.move_left()
+            if grid[agente.position[0]][agente.position[1]] == "G":
+              time.sleep(2)
+              done = True
+              print("FIM")
+              break
